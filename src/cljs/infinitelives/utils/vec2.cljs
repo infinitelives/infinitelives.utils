@@ -52,7 +52,7 @@
 
 (defn almost
   "Returns true if all the vectors passed in are so close they
-  are almost equals. This is for dealing with precision problems
+  are almost equal. This is for dealing with precision problems
   in comparison."
   ([v0 v1]
    (and
