@@ -20,20 +20,20 @@
          (= (aget v3 1) 0)))))
 
 (deftest magnitude
-  (let [v (vec/vec2 on-root-2 on-root-2)]
-    (is (< 0.9999999 (vec/magnitude v) 1.0000001))
-    (is (< 0.9999999 (vec/magnitude v) 1.0000001)))
-  (let [v (vec/vec2 10 -10)]
-    (is (= (Math/sqrt 200) (vec/magnitude v)))
-    (is (= 200 (vec/magnitude-squared v)))))
+  (let [v (vec2/vec2 on-root-2 on-root-2)]
+    (is (< 0.9999999 (vec2/magnitude v) 1.0000001))
+    (is (< 0.9999999 (vec2/magnitude v) 1.0000001)))
+  (let [v (vec2/vec2 10 -10)]
+    (is (= (Math/sqrt 200) (vec2/magnitude v)))
+    (is (= 200 (vec2/magnitude-squared v)))))
 
 (deftest distance
-  (let [v0 (vec/vec2 20 10)
-        v1 (vec/vec2 -20 10)]
-    (is (= 40 (vec/distance v0 v1)))
-    (is (= 1600 (vec/distance-squared v0 v1)))))
+  (let [v0 (vec2/vec2 20 10)
+        v1 (vec2/vec2 -20 10)]
+    (is (= 40 (vec2/distance v0 v1)))
+    (is (= 1600 (vec2/distance-squared v0 v1)))))
 
 (deftest equals
-  (is (vec/equals
-       (vec/vec2 100 -200)
-       (vec/vec2 100 -200))))
+  (is (vec2/equals
+       (vec2/vec2 100 -200)
+       (vec2/vec2 100 -200))))
