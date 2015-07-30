@@ -4,6 +4,10 @@
   (:require
    [goog.vec.Vec2 :as Vec2]))
 
+(def ^{:dynamic true
+       :doc "The fuzzy zone size for the almost comparitor"}
+  *almost-delta* 1e-14)
+
 (def
   ^{:arglist '([x y])
     :doc "Create a two dimensional vector #<x,y>"}
@@ -45,3 +49,23 @@
     :doc "Returns true is both v0 and v1 point in the same direction
      and are of the same length"}
   equals Vec2/equals)
+
+(defn almost
+  "Returns true if all the vectors passed in are so close they
+  are almost equals. This is for dealing with precision problems
+  in comparison."
+  ([v0 v1]
+   (and
+    (< (Math/abs (- (aget v0 0) (aget v1 0))) *almost-delta*)
+    (< (Math/abs (- (aget v0 1) (aget v1 1))) *almost-delta*)))
+
+  ([v0 v1 & args]
+   (let [vecs (concat [v0 v1] args)
+         xs (for [v vecs] (aget v 0))
+         ys (for [v vecs] (aget v 1))
+         min-x (reduce min xs)
+         max-x (reduce max xs)
+         min-y (reduce min ys)
+         max-y (reduce max ys)]
+     (and (< (- max-x min-x) *almost-delta*)
+          (< (- max-y min-y) *almost-delta*)))))

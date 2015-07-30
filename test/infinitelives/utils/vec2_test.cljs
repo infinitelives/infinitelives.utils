@@ -37,3 +37,20 @@
   (is (vec2/equals
        (vec2/vec2 100 -200)
        (vec2/vec2 100 -200))))
+
+(deftest almost
+  (binding [vec2/*almost-delta* 1e-5]
+    (is (vec2/almost
+         (vec2/vec2 20 20)
+         (vec2/vec2 20 20)))
+    (is (vec2/almost
+         (vec2/vec2 0 0)
+         (vec2/vec2 1e-6 1e-6)))
+    (is (not (vec2/almost
+              (vec2/vec2 0 0)
+              (vec2/vec2 0 0)
+              (vec2/vec2 0 0)
+              (vec2/vec2 0 0)
+              (vec2/vec2 0 0)
+              (vec2/vec2 0 0)
+              (vec2/vec2 0 0.0001))))))
