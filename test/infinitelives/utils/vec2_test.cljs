@@ -54,3 +54,14 @@
               (vec2/vec2 0 0)
               (vec2/vec2 0 0)
               (vec2/vec2 0 0.0001))))))
+
+(deftest add
+  (is (vec2/equals
+       (vec2/vec2 1 1)
+       (vec2/add
+        (vec2/vec2 -1 -2) (vec2/vec2 2 3)))))
+
+(deftest sub
+  (is (vec2/equals
+       (vec2/vec2 1 1)
+       (vec2/sub (vec2/vec2 20 -10) (vec2/vec2 19 -11)))))

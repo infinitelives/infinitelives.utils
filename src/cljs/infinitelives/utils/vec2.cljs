@@ -69,3 +69,17 @@
          max-y (reduce max ys)]
      (and (< (- max-x min-x) *almost-delta*)
           (< (- max-y min-y) *almost-delta*)))))
+
+(defn add
+  "Returns a new vec2 which is v0 + v1"
+  [v0 v1]
+  (Vec2/add v0 v1 (make)))
+
+(defn sub
+  "Passed one arg, returns a vector that is equal and
+  opposite to v, 180 degrees around. Passed two args,
+  returns a vector that is equal to v0 - v1"
+  ([v]
+   (Vec2/negate v (make)))
+  ([v0 v1]
+   (Vec2/subtract v0 v1 (make))))
