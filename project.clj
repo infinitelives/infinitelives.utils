@@ -15,7 +15,6 @@
   {
    :builds {:test
             {:source-paths ["src" "test"]
-             :notify-command []
              :compiler {:output-to "resources/test/compiled.js"
                         :optimizations :whitespace
                         :pretty-print true}}}
