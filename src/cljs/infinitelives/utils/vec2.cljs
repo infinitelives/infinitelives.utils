@@ -83,3 +83,90 @@
    (Vec2/negate v (make)))
   ([v0 v1]
    (Vec2/subtract v0 v1 (make))))
+
+(defn dot
+  "Returns the dot product of v0 and v1"
+  [v0 v1]
+  (Vec2/dot v0 v1))
+
+(defn scale
+  "Returns a vector that is v, multiplied by the scalar."
+  [v scalar]
+  (Vec2/scale v scalar (make)))
+
+(defn unit
+  "Returns a unit vector that points in the same direction as v"
+  [v]
+  (Vec2/normalize v (make)))
+
+(defn abs
+  "Returns a vector that is a flipped and mirrored
+  version of v, such that it appears in the positive quadrant"
+  [v]
+  (Vec2/abs v (make)))
+
+(defn direction
+  "returns a unit vector indicating the direction
+  from the tip of v0, to the tip of v1"
+  [v0 v1]
+  (Vec2/direction v0 v1 (make)))
+
+(defn rotate
+  "return a vector identical to v but rotated
+  ang radians"
+ [v ang]
+  (let [cos (Math/cos ang)
+        sin (Math/sin ang)]
+    (vec2 (- (* cos (aget v 0)) (* sin (aget v 1)))
+          (+ (* cos (aget v 1)) (* sin (aget v 0))))))
+
+(defn random-unit
+  "Return a vector pointing in a random direction, but of exactly unit
+  length"
+  []
+  (let [ang (* (rand) Math/PI 2)]
+    (vec2 (Math/cos ang)
+          (Math/sin ang))))
+
+(defn random
+  "return a random vector that fits entirely in the unit circle, that
+  is, whose length is always less than or equal to one."
+  []
+  (let [mag (Math/sqrt (rand))
+        ang (* (rand) Math/PI 2)]
+    (vec2 (* mag (Math/cos ang))
+          (* mag (Math/sin ang)))))
+
+(defn lerp
+  "linearly interperet a vector between v0 and v1. f is the factor
+  along the interpolation. f=0 is v0. f=1 is v1. f can extend outside
+  0 and 1"
+  [v0 v1 f]
+  (Vec2/lerp v0 v1 f (make)))
+
+(defn heading
+  "horrible function you shouldn't really use. Just keep working with
+  vectors directly. Returns the angle of the vector. Answers always
+  between 0 and 2*PI"
+  [v]
+  (let [pi-on-2 (/ Math/PI 2)
+        x (aget v 0)
+        y (aget v 1)]
+    (if (= 0 x)
+      ;; vertical
+      (if (neg? y)
+        (* 3 pi-on-2)
+        pi-on-2)
+
+      (if (= 0 y)
+        ;; horizontal
+        (if (neg? x)
+          Math/PI
+          0)
+
+        ;; calculable angle
+        (if (pos? x)
+          (if (pos? y)
+            (Math/atan (/ y x))
+            (+ Math/PI Math/PI (Math/atan (/ y x))))
+          (+ Math/PI (Math/atan (/ y x))))))))
