@@ -1,17 +1,18 @@
 (ns infinitelives.utils.events-test
-  (:require [cljs.test :refer-macros [deftest is]]
+  (:require [cljs.test :refer-macros [deftest is are]]
             [infinitelives.utils.events :as events]))
 
 (deftest ascii
-  (is (= 10 (events/ascii "\n")))
-  (is (= 13 (events/ascii "\r")))
-  (is (= 32 (events/ascii " ")))
-  (is (= 48 (events/ascii "0")))
-  (is (= 57 (events/ascii "9")))
-  (is (= 65 (events/ascii "A")))
-  (is (= 90 (events/ascii "Z")))
-  (is (= 97 (events/ascii "a")))
-  (is (= 122 (events/ascii "z"))))
+  (are [x y] (= x y)
+       10 (events/ascii "\n")
+       13 (events/ascii "\r")
+       32 (events/ascii " ")
+       48 (events/ascii "0")
+       57 (events/ascii "9")
+       65 (events/ascii "A")
+       90 (events/ascii "Z")
+       97 (events/ascii "a")
+       122 (events/ascii "z")))
 
 ;; just test the keys are there. we assume the codes are correct.
 (deftest key-codes
