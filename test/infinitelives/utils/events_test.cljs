@@ -13,6 +13,7 @@
   (is (= 97 (events/ascii "a")))
   (is (= 122 (events/ascii "z"))))
 
+;; just test the keys are there. we assume the codes are correct.
 (deftest key-codes
   (let [ks (set (keys events/key-codes))]
     (doseq [c "0123456789abcdefghijklmnopqrstuvwxyz,.;'[]-=`/\\"]
