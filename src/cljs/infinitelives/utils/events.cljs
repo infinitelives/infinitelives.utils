@@ -91,3 +91,28 @@ eg.
    ;; lookup by char
    (for [c "0123456789abcdefghijklmnopqrstuvwxyz,.;'[]-=`/\\"]
      [c (- (ascii c) 32)])))
+
+(defn handle-keydown-event
+  "the base event handler for key down events. Takes the keycode
+  and sets that key in the key-state dictionary to true"
+  [ev]
+  (swap! key-state (fn [old] (assoc old (.-keyCode ev) true)))
+
+  ;; if debug, we should passthrough ctrl-shift keys for dev tools
+  (if (and *devtools-passthrough* (.-ctrlKey ev) (.-shiftKey ev))
+    ;; pass through keypress
+    false
+
+    ;; else prevent event propagation (cursor keys scroll body on mozilla)
+    (.preventDefault ev)))
+
+(defn handle-keyup-event
+  "the basic event handler for key up events. Takes the keycode
+  and removes it as a key from the key-state dictionary"
+  [ev]
+  (swap! key-state (fn [old] (dissoc old (.-keyCode ev))))
+
+  ;; stop event propagation on mozilla
+  (.preventDefault ev)
+
+  true)
