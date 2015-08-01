@@ -26,3 +26,39 @@
                :f2 :f3 :f4 :f5 :f6 :f7 :f8 :f9 :f10 :f11 :f12 :numlock :scrolllock :comma
                :. :/ :backtick :squareleft :backslash :squareright :quote]]
       (is (contains? ks k)))))
+
+(defn- make-event [t code]
+  (let [ev (.createEvent js/document "Event")]
+    (.initEvent ev t true true)
+    (set! (.-keyCode ev) code)
+    ev))
+
+(defn- keydown
+  [code]
+  (.dispatchEvent js/document (make-event "keydown" code)))
+
+(defn- keyup [code]
+
+  (.dispatchEvent js/document (make-event "keyup" code)))
+
+(deftest is-pressed?
+  (events/install-key-handler!)
+  (is (not (events/is-pressed? :backspace)))
+  (keydown 8)
+  (is (events/is-pressed? :backspace))
+  (keyup 8)
+  (is (not (events/is-pressed? :backspace)))
+  (keydown 38) ;; up
+  (keydown 65) ;; a
+  (keydown 16) ;; shift
+  (is (and
+       (events/is-pressed? :shift)
+       (events/is-pressed? "a")
+       (events/is-pressed? :up)))
+  (keyup 38)
+  (keyup 65)
+  (keyup 16)
+  (is (not (or
+            (events/is-pressed? :shift)
+            (events/is-pressed? "a")
+            (events/is-pressed? :up)))))
