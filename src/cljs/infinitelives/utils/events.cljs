@@ -7,11 +7,15 @@
    [cljs.core.async.macros :refer [go]])
   )
 
+;; a dynamic var that passes through ctrl+shift+key events
+;; to the root event handler
+(defonce ^:dynamic *devtools-passthrough* true)
+
 ;;
 ;; an atom which holds the present state of a key
 ;; true meaning pressed, and false or nil meaning raised
 ;;
-(def !key-state (atom {}))
+(def key-state (atom {}))
 
 (defn ascii
   "A clojurescript version of ascii value of. javascript doesn't have
@@ -122,3 +126,29 @@ eg.
   []
   (.addEventListener js/window "keydown" handle-keydown-event)
   (.addEventListener js/window "keyup" handle-keyup-event))
+
+(defn is-pressed?
+  "returns true if the key is pressently down. code is a keyword,
+  or a string of length 1. Examples:
+
+  ```
+  ;; test if keys are down by keyword
+  (is-pressed? :backspace)
+  (is-pressed? :f10)
+  (is-pressed? :left)
+  (is-pressed? :space)
+  (is-pressed? :w)
+  (is-pressed? :a)
+
+  ;; test if keys are down by string
+  (is-pressed? \" \")
+  (is-pressed? \"w\")
+  (is-pressed? \"a\")
+  (is-pressed? \"d\")
+  (is-pressed? \"s\")
+  ```
+
+  See key-codes for a list of keyword keys.
+"
+  [code]
+  (@key-state (key-codes code)))
