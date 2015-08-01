@@ -116,3 +116,9 @@ eg.
   (.preventDefault ev)
 
   true)
+
+(defn install-key-handler!
+  "install the keyup and keydown event handlers"
+  []
+  (.addEventListener js/window "keydown" handle-keydown-event)
+  (.addEventListener js/window "keyup" handle-keyup-event))
