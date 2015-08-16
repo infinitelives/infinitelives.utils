@@ -305,3 +305,19 @@ eg.
 
 (def get-gamepads (make-get-gamepads))
 
+;;
+;; touch wrapper (hammer.js)
+;;
+(comment
+  (defn touch-channel
+    [el]
+    (let [c (chan)]
+      (doto (js/Hammer. el)
+        (.on "pan" #(put! c [:pan ^js/Event %]))
+                                        ;(.on "tap" #(put! c [:tap ^js/Event %]))
+        (.on "doubletap" #(put! c [:doubletap %]))
+                                        ;(.on "pinch" #(put! c [:pinch %]))
+                                        ;(.on "rotate" #(put! c [:rotate %]))
+                                        ;(.on "swipe" #(put! c [:swipe %]))
+        )
+      c)))
