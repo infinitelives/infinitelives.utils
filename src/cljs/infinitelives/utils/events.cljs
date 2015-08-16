@@ -225,3 +225,32 @@ eg.
   ```"
   [delay]
   (wait-frames (* 60 (/ delay 1000))))
+
+
+;;
+;; Resize Channel
+;; --------------
+;; resize channels receive [width height]
+;;
+(def *resize-chans* (atom #{}))
+
+(defn new-resize-chan []
+  (let [c (chan)]
+    (swap! *resize-chans* conj c)
+    c))
+
+(defn del-resize-chan [c]
+  (swap! *resize-chans* disj c))
+
+(defn clear-resize-chans! []
+  (swap! *resize-chans* #{}))
+
+(defn resize-event-chan-handler [ev]
+  (let [size [(.-innerWidth js/window) (.-innerHeight js/window)]]
+    (doseq [c @*resize-chans*] (put! c size))))
+
+(defn install-resize-handler
+  "install the resize callback to resize the main canvas renderer"
+  []
+  (.addEventListener js/window "resize" resize-event-chan-handler))
+
