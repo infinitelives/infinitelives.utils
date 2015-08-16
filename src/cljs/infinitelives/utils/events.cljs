@@ -152,3 +152,76 @@ eg.
 "
   [code]
   (@key-state (key-codes code)))
+
+;;
+;; Animation handler
+;;
+(defn make-request-animation-frame
+  "compose a function that is the r-a-f func. returns a function. This returned function takes a callback and ensures
+  its called next frame"
+  []
+  (cond
+   (.-requestAnimationFrame js/window)
+   #(.requestAnimationFrame js/window %)
+
+   (.-webkitRequestAnimationFrame js/window)
+   #(.webkitRequestAnimationFrame js/window %)
+
+   (.-mozRequestAnimationFrame js/window)
+   #(.mozRequestAnimationFrame js/window %)
+
+   (.-oRequestAnimationFrame js/window)
+   #(.oRequestAnimationFrame js/window %)
+
+   (.-msRequestAnimationFrame js/window)
+   #(.msRequestAnimationFrame js/window %)
+
+   :else
+   #(.setTimeout js/window % (/ 1000 *target-fps*))))
+
+;; build the actual function
+(def
+  ^{:arglist '([callback])
+    :doc "schedules the passed in callback to be fired once, next animation frame."}
+  request-animation-frame (make-request-animation-frame))
+
+(defn next-frame
+  "returns a single use channel which closes on next frame callback.
+  pulling from it waits exactly one frame. eg
+
+  ```
+  ;; wait one frame
+  (<! (next-frame))
+  ```"
+  []
+  (let [c (chan)]
+    (request-animation-frame #(close! c))
+    c))
+
+(defn wait-frames
+  "returns a channel which closes when a certain number
+  of frames have passed. eg
+
+  ```
+  ;; wait 10 frames
+  (<! (wait-frames 10))
+  ```"
+  [frames]
+  (go
+    (loop [i frames]
+      (when (pos? i)
+        (<! (next-frame))
+        (recur (dec i))))))
+
+(defn wait-time
+  "returns a channel which closes when a certain amount of
+  time in milliseconds has passed, but determines that time by counting
+  the requestAnimationFrame callbacks, so that when tab focus is lost,
+  the callback, and thus this wait is suspended.
+
+  ```
+  ;; wait one seconds worth of frames
+  (<! (wait-time 1000))
+  ```"
+  [delay]
+  (wait-frames (* 60 (/ delay 1000))))
