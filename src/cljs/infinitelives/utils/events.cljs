@@ -156,6 +156,8 @@ eg.
 ;;
 ;; Animation handler
 ;;
+(def fallback-fps 60)
+
 (defn make-request-animation-frame
   "compose a function that is the r-a-f func. returns a function. This returned function takes a callback and ensures
   its called next frame"
@@ -177,7 +179,7 @@ eg.
    #(.msRequestAnimationFrame js/window %)
 
    :else
-   #(.setTimeout js/window % (/ 1000 *target-fps*))))
+   #(.setTimeout js/window % (/ 1000 fallback-fps))))
 
 ;; build the actual function
 (def
@@ -249,7 +251,7 @@ eg.
   (let [size [(.-innerWidth js/window) (.-innerHeight js/window)]]
     (doseq [c @*resize-chans*] (put! c size))))
 
-(defn install-resize-handler
+(defn install-resize-handler!
   "install the resize callback to resize the main canvas renderer"
   []
   (.addEventListener js/window "resize" resize-event-chan-handler))
@@ -277,15 +279,15 @@ eg.
   (request-animation-frame frame-event-chan-handler)
   (doseq [c @*frame-chans*] (put! c true)))
 
-(defn install-frame-handler
+(defn install-frame-handler!
   "install the frame callback to send frame chan messages"
   []
   (request-animation-frame frame-event-chan-handler))
 
 ;; install all the event channel handlers
-(install-key-handler)
-(install-frame-handler)
-(install-resize-handler)
+(install-key-handler!)
+(install-frame-handler!)
+(install-resize-handler!)
 
 ;;
 ;; gamepad wrapper
