@@ -281,3 +281,8 @@ eg.
   "install the frame callback to send frame chan messages"
   []
   (request-animation-frame frame-event-chan-handler))
+
+;; install all the event channel handlers
+(install-key-handler)
+(install-frame-handler)
+(install-resize-handler)
