@@ -286,3 +286,22 @@ eg.
 (install-key-handler)
 (install-frame-handler)
 (install-resize-handler)
+
+;;
+;; gamepad wrapper
+;;
+
+;; define game controller functions
+(defn make-get-gamepads []
+  (cond
+   (.-getGamepads js/navigator)
+   #(.getGamepads js/navigator %)
+
+   (.-webkitGetGamepads js/navigator)
+   #(.webkitGetGamepads js/navigator %)
+
+   :default
+   #()))
+
+(def get-gamepads (make-get-gamepads))
+
