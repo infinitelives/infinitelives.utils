@@ -284,11 +284,6 @@ eg.
   []
   (request-animation-frame frame-event-chan-handler))
 
-;; install all the event channel handlers
-(install-key-handler!)
-(install-frame-handler!)
-(install-resize-handler!)
-
 ;;
 ;; gamepad wrapper
 ;;
@@ -323,3 +318,12 @@ eg.
                                         ;(.on "swipe" #(put! c [:swipe %]))
         )
       c)))
+
+
+
+;; install handlers
+
+;; install all the event channel handlers
+(install-key-handler!)
+(install-frame-handler!)
+(install-resize-handler!)
