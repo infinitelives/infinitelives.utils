@@ -2,9 +2,8 @@
 
 (defn ends-with? [str end]
   (let [len (.-length str)
-        end-len (.-length end)
-        pos (.indexOf str end)]
-    (= (+ pos end-len) len)))
+        end-len (.-length end)]
+    (not= -1 (.indexOf str end (- len end-len)))))
 
 (defn starts-with? [str start]
-  (= 0 (indexOf str start)))
+  (= 0 (.indexOf str start)))
