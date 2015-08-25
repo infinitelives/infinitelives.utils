@@ -170,3 +170,19 @@
             (Math/atan (/ y x))
             (+ Math/PI Math/PI (Math/atan (/ y x))))
           (+ Math/PI (Math/atan (/ y x))))))))
+
+(defn truncate
+  [v scalar]
+  (let [len (magnitude v)]
+    (if (> len scalar)
+      (scale (unit v) scalar)
+      v)))
+
+(defn as-vector [v]
+  [(aget v 0) (aget v 1)])
+
+(defn get-x [v]
+  (aget v 0))
+
+(defn get-y [v]
+  (aget v 1))
