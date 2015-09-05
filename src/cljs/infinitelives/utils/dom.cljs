@@ -72,3 +72,9 @@
     (set! (.-textContent elem) text)
     (set! (.-innerText elem) text))
   elem)
+
+(defn set-html!
+  "Set the innerHTML of `elem` to `html`"
+  [elem html]
+  (set! (.-innerHTML elem) html)
+  elem)
