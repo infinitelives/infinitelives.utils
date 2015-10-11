@@ -30,6 +30,16 @@
      (doto parent
        (.appendChild child))))
 
+(defn remove!
+  "Remove `elem` from `parent`, return `parent`"
+  ([elem]
+     (let [p (parent elem)]
+       (assert p "Target element must have a parent")
+       (remove! p elem)))
+
+  ([p elem]
+     (doto p (.removeChild elem))))
+
 (defn create-element
   ([tag]
      (.createElement js/document (as-str tag)))
@@ -71,4 +81,10 @@
   (if-not (undefined? (.-textContent elem))
     (set! (.-textContent elem) text)
     (set! (.-innerText elem) text))
+  elem)
+
+(defn set-html!
+  "Set the innerHTML of `elem` to `html`"
+  [elem html]
+  (set! (.-innerHTML elem) html)
   elem)
