@@ -319,6 +319,9 @@ eg.
 ; make the gamepad handler a singleton
 (def gamepad-handler-installed (atom false))
 
+; extract the javascripty bits from gamepad events
+(defn get-gamepad-event-index [ev] (aget (aget ev "gamepad") "index"))
+
 ; singleton function for initiating the listeners and polling loop
 (defn install-gamepad-handler! []
   (when (compare-and-set! gamepad-handler-installed false true)
@@ -329,9 +332,9 @@ eg.
           (when gamepad-data
             (set-gamepad-atom! gamepad-index gamepad-data)))))
     ; catch gamepad connect events and fire the callback
-    (js/window.addEventListener "gamepadconnected" (fn [ev] (set-gamepad-atom! ev.gamepad.index ev.gamepad) (initiate-gamepad-callbacks ev.gamepad.index ev.gamepad)))
+    (js/window.addEventListener "gamepadconnected" (fn [ev] (set-gamepad-atom! (get-gamepad-event-index ev) (aget ev "gamepad")) (initiate-gamepad-callbacks (get-gamepad-event-index ev) (aget ev "gamepad"))))
     ; catch gamepad disconnect events and reset the relevant atom
-    (js/window.addEventListener "gamepaddisconnected" (fn [ev] (set-gamepad-atom! ev.gamepad.index nil) (initiate-gamepad-callbacks ev.gamepad.index nil)))
+    (js/window.addEventListener "gamepaddisconnected" (fn [ev] (set-gamepad-atom! (get-gamepad-event-index ev) nil) (initiate-gamepad-callbacks (get-gamepad-event-index ev) nil)))
     ; start the polling loop that will continuously query gamepads for updated data
     ; because the API does not include events except for connect and disconnect
     (js/setInterval get-gamepads 25)))
