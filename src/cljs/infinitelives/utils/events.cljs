@@ -290,11 +290,11 @@ eg.
 ;; define game controller functions
 (defn make-get-gamepads []
   (cond
-   (.-getGamepads js/navigator)
-   #(.getGamepads js/navigator %)
+   (aget js/navigator "getGamepads")
+   (fn [&args] (.apply (aget js/navigator "getGamepads") js/navigator []))
 
-   (.-webkitGetGamepads js/navigator)
-   #(.webkitGetGamepads js/navigator %)
+   (aget js/navigator "wegkitGetGamepads")
+   (fn [&args] (.apply (aget js/navigator "webkitGetGamepads") js/navigator []))
 
    :default
    #()))
