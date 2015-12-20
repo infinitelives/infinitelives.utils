@@ -2,7 +2,8 @@
   (:require [cljs.test :refer-macros [run-all-tests]]
             [infinitelives.utils.vec2-test]
             [infinitelives.utils.events-test]
-            [infinitelives.utils.string-test]))
+            [infinitelives.utils.string-test]
+            [infinitelives.utils.math-test]))
 
 (enable-console-print!)
 
