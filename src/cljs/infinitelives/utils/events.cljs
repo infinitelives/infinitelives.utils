@@ -4,8 +4,7 @@
   (:require
    [cljs.core.async :refer [put! chan <! >! alts! timeout close!]])
   (:require-macros
-   [cljs.core.async.macros :refer [go]])
-  )
+   [cljs.core.async.macros :refer [go]]))
 
 ;; a dynamic var that passes through ctrl+shift+key events
 ;; to the root event handler
@@ -291,16 +290,69 @@ eg.
 ;; define game controller functions
 (defn make-get-gamepads []
   (cond
-   (.-getGamepads js/navigator)
-   #(.getGamepads js/navigator %)
+   (aget js/navigator "getGamepads")
+   (fn [&args] (.apply (aget js/navigator "getGamepads") js/navigator []))
 
-   (.-webkitGetGamepads js/navigator)
-   #(.webkitGetGamepads js/navigator %)
+   (aget js/navigator "wegkitGetGamepads")
+   (fn [&args] (.apply (aget js/navigator "webkitGetGamepads") js/navigator []))
 
    :default
    #()))
 
 (def get-gamepads (make-get-gamepads))
+
+; keep a list of gamepads and their connection state - when connected this is the gamepad state datastruct
+(def !gamepads {0 (atom nil) 1 (atom nil) 2 (atom nil) 3 (atom nil)})
+
+; list of functions listening for gamepad connect events
+(def !gamepad-connected-callbacks (atom []))
+
+(defn initiate-gamepad-callbacks [gamepad-index gamepad-data]
+  ; run the callbacks
+  (doseq [g @!gamepad-connected-callbacks] (g gamepad-index (get !gamepads gamepad-index))))
+
+; set a particular gamepad's connected atom state
+(defn set-gamepad-atom! [gamepad-index value]
+  (let [g (get !gamepads gamepad-index)]
+    (reset! g value)))
+
+; make the gamepad handler a singleton
+(def gamepad-handler-installed (atom false))
+
+; extract the javascripty bits from gamepad events
+(defn get-gamepad-event-index [ev] (aget (aget ev "gamepad") "index"))
+
+; singleton function for initiating the listeners and polling loop
+(defn install-gamepad-handler! []
+  (when (compare-and-set! gamepad-handler-installed false true)
+    ; make sure the initial atoms are set and call the callback if it's already connected
+    (let [gamepads (get-gamepads)]
+      (doseq [gamepad-index (range 4)]
+        (let [gamepad-data (aget gamepads gamepad-index)]
+          (when gamepad-data
+            (set-gamepad-atom! gamepad-index gamepad-data)))))
+    ; catch gamepad connect events and fire the callback
+    (js/window.addEventListener "gamepadconnected" (fn [ev] (set-gamepad-atom! (get-gamepad-event-index ev) (aget ev "gamepad")) (initiate-gamepad-callbacks (get-gamepad-event-index ev) (aget ev "gamepad"))))
+    ; catch gamepad disconnect events and reset the relevant atom
+    (js/window.addEventListener "gamepaddisconnected" (fn [ev] (set-gamepad-atom! (get-gamepad-event-index ev) nil) (initiate-gamepad-callbacks (get-gamepad-event-index ev) nil)))
+    ; start the polling loop that will continuously query gamepads for updated data
+    ; because the API does not include events except for connect and disconnect
+    (js/setInterval get-gamepads 25)))
+
+; listen out for gamepads connecting and disconnecting
+; any time a new gamepad connects the callback will be called
+; the callback is passed [gamepad-index gamepad-data] whenever a gamepad connects or disconnects
+; gamepad-data is an atom that will contain the js datastructure of gamepad data
+; if will become nil if the gamepad disconnects (the callback will also be called)
+(defn install-gamepad-listener [callback]
+  ; kick off the background polling interval singleton if not started already
+  (install-gamepad-handler!) 
+  ; add this callback to our list of listeners
+  (swap! !gamepad-connected-callbacks conj callback)
+  ; fire a callback for any gamepads that are already connected
+  (doseq [c (range 4)]
+    (let [g (get !gamepads c)]
+      (when @g (callback c g)))))
 
 ;;
 ;; touch wrapper (hammer.js)

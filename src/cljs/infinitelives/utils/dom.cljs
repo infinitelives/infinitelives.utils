@@ -88,3 +88,17 @@
   [elem html]
   (set! (.-innerHTML elem) html)
   elem)
+
+(defn get-bounds [id]
+  "Get a dom entity's bounding rect by id, using getBoundingClientRect."
+  (.getBoundingClientRect (js/document.getElementById id)))
+
+(defn collision-test-by-id [id-a id-b]
+  "Test whether two dom elements are overlapping by id."
+  (let [bounds-a (get-bounds id-a)
+        bounds-b (get-bounds id-b)]
+    (not (or (< bounds-a.right bounds-b.left)
+             (> bounds-a.left bounds-b.right)
+             (< bounds-a.bottom bounds-b.top)
+             (> bounds-a.top bounds-b.bottom)))))
+
