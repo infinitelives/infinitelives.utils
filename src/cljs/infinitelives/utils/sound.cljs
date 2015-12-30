@@ -6,6 +6,9 @@
 
 (def default-gain 0.7)
 
+;; where we store all the loaded sounds
+(defonce !sounds (atom {}))
+
 (defn load-sound
   "Initiates a download of the url as a sound. Returns a channel.
   When loaded and decoded, sends a decoded buffer object down the
@@ -19,6 +22,18 @@
     (.send req)
     c))
 
+(defn register-sound
+  [url]
+  (when (apply or (map #(string/end-with? url %)
+                       [".ogg" ".mp3" ".wav"]))
+    (go
+      (swap! !sounds
+             assoc (string/url-keyword url)
+             (<! (load-sound url))))))
+
+(defn get-sound [key]
+  (key @!sounds))
+
 (defn play-sound
   "pass this a buffer, and an optional gain parameter, and the
   sound will be played to the speakers"
@@ -28,7 +43,8 @@
      (if loop-flag
        (set! (.-loop source) true)
        (set! (.-loop source) false))
-     (set! (.-buffer source) buff)
+     (set! (.-buffer source)
+           (if (keyword? buff) (get-sound buff) buff))
      (.connect source gain)
      (.connect gain (.-destination audio-context))
      (set! (.-gain.value gain) g)
