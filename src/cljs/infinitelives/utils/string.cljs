@@ -7,3 +7,11 @@
 
 (defn starts-with? [str start]
   (= 0 (.indexOf str start)))
+
+(defn url-keyword [url]
+  (-> url
+      (.split "/")
+      last
+      (.split ".")
+      first
+      keyword))
