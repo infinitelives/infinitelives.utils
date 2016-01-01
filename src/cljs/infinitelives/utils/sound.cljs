@@ -1,6 +1,9 @@
 (ns infinitelives.utils.sound
   (:require [cljs.core.async :refer [put! chan <! >! alts! timeout close!]]
-            ))
+            [infinitelives.utils.string :as string]
+            )
+  (:require-macros [cljs.core.async.macros :refer [go]])
+)
 
 (def audio-context (if js/window.AudioContext (js/window.AudioContext.) (js/window.webkitAudioContext.)))
 
@@ -24,8 +27,9 @@
 
 (defn register-sound
   [url]
-  (when (apply or (map #(string/end-with? url %)
-                       [".ogg" ".mp3" ".wav"]))
+  (when (or (string/ends-with? url ".ogg")
+            (string/ends-with? url ".mp3")
+            (string/ends-with? url ".wav"))
     (go
       (swap! !sounds
              assoc (string/url-keyword url)
