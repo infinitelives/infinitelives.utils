@@ -12,3 +12,9 @@
   (is (string/starts-with? "test string.ext" "test"))
   (is (string/starts-with? "test string test.ext" "test"))
   (is (not (string/starts-with? "test string.ext" "est"))))
+
+(deftest url-keyword
+  (is (string/url-keyword "http://domain.com/path/to/file.ext") :file))
+
+(deftest get-extension
+  (is (string/get-extension "http://domain.com/path/to/file.ext") ".ext)"))

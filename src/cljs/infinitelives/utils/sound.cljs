@@ -26,14 +26,19 @@
     c))
 
 (defn register-sound
-  [url]
-  (when (or (string/ends-with? url ".ogg")
-            (string/ends-with? url ".mp3")
-            (string/ends-with? url ".wav"))
-    (go
-      (swap! !sounds
-             assoc (string/url-keyword url)
-             (<! (load-sound url))))))
+  ([url]
+   (go
+     (when (or (string/ends-with? url ".ogg")
+               (string/ends-with? url ".mp3")
+               (string/ends-with? url ".wav"))
+       (swap! !sounds
+              assoc (string/url-keyword url)
+              (<! (load-sound url))))))
+  ([url obj]
+   (swap! !sounds
+              assoc (string/url-keyword url)
+              obj))
+)
 
 (defn get-sound [key]
   (key @!sounds))

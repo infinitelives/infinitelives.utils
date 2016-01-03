@@ -15,3 +15,6 @@
       (.split ".")
       first
       keyword))
+
+(defn get-extension [path]
+  (last (.split path ".")))
