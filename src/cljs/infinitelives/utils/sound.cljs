@@ -25,19 +25,11 @@
     (.send req)
     c))
 
-(defn register-sound
-  ([url]
-   (go
-     (when (or (string/ends-with? url ".ogg")
-               (string/ends-with? url ".mp3")
-               (string/ends-with? url ".wav"))
-       (swap! !sounds
-              assoc (string/url-keyword url)
-              (<! (load-sound url))))))
-  ([url obj]
-   (swap! !sounds
-              assoc (string/url-keyword url)
-              obj))
+(defn register-sound!
+  [url obj]
+  (swap! !sounds
+         assoc (string/url-keyword url)
+         obj)
 )
 
 (defn get-sound [key]
