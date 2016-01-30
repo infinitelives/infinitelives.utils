@@ -152,6 +152,11 @@ eg.
   [code]
   (@key-state (key-codes code)))
 
+(defn any-pressed?
+  "Is any key on the keyboard pressed?"
+  []
+  (-> key-state deref keys count zero? not))
+
 ;;
 ;; Animation handler
 ;;
@@ -346,7 +351,7 @@ eg.
 ; if will become nil if the gamepad disconnects (the callback will also be called)
 (defn install-gamepad-listener [callback]
   ; kick off the background polling interval singleton if not started already
-  (install-gamepad-handler!) 
+  (install-gamepad-handler!)
   ; add this callback to our list of listeners
   (swap! !gamepad-connected-callbacks conj callback)
   ; fire a callback for any gamepads that are already connected
