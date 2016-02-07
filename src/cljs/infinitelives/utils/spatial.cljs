@@ -46,13 +46,21 @@
       m)
     (dissoc m k)))
 
+(defn add-to-hash-with-hash [{:keys [hash divider] :as spatial} entity-key position key-pos]
+  (update-in spatial [:hash key-pos] assoc entity-key position))
+
 (defn add-to-hash [{:keys [hash divider] :as spatial} entity-key position]
-  (let [key-pos (hash-position divider position)]
-    (update-in spatial [:hash key-pos] assoc entity-key position)))
+  (add-to-hash-with-hash
+   spatial entity-key position
+   (hash-position divider position)))
+
+(defn remove-from-hash-with-hash [{:keys [hash divider] :as spatial} entity-key position key-pos]
+  (update-in spatial [:hash] dissoc-in [key-pos] entity-key))
 
 (defn remove-from-hash [{:keys [hash divider] :as spatial} entity-key position]
-  (let [key-pos (hash-position divider position)]
-    (update-in spatial [:hash] dissoc-in [key-pos] entity-key)))
+  (remove-from-hash-with-hash
+   spatial entity-key position
+   (hash-position divider position)))
 
 (defn move-in-hash [{:keys [hash divider] :as spatial} entity-key old-pos new-pos]
   (let [old-hash (hash-position divider old-pos)
@@ -62,13 +70,10 @@
       ;; just update the position in the hash
       (assoc-in spatial [:hash old-hash entity-key] new-pos)
 
-      ;; different cells. TODO: this recalculates the hashes. just use the existing ones
+      ;; different cells.
       (-> spatial
-          (remove-from-hash entity-key old-pos)
-          (add-to-hash entity-key new-pos)))))
-
-
-
+          (remove-from-hash-with-hash entity-key old-pos old-hash)
+          (add-to-hash-with-hash entity-key new-pos new-hash)))))
 
 (defn add-to-spatial! [spatial-keyword entity-key position]
   (swap! spatial-hashes update-in [spatial-keyword] add-to-hash entity-key position))
