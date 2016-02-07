@@ -3,7 +3,8 @@
             [infinitelives.utils.vec2-test]
             [infinitelives.utils.events-test]
             [infinitelives.utils.string-test]
-            [infinitelives.utils.math-test]))
+            [infinitelives.utils.math-test]
+            [infinitelives.utils.spatial-test]))
 
 (enable-console-print!)
 
