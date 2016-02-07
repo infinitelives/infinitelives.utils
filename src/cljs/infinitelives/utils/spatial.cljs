@@ -75,6 +75,37 @@
           (remove-from-hash-with-hash entity-key old-pos old-hash)
           (add-to-hash-with-hash entity-key new-pos new-hash)))))
 
+;; TODO: rewrite this in some amazing functional inspiration
+;; to solve n-cords where n is integers >= 1
+(defn all-cells [[x1 y1 z1] [x2 y2 z2]]
+  (if (and (nil? z1) (nil? z2))
+    ;; 2-coord
+    (for [x (range x1 (inc x2))
+          y (range y1 (inc y2))]
+      [x y])
+
+    ;; 3-corrd
+    (for [x (range x1 (inc x2))
+          y (range y1 (inc y2))
+          z (range z1 (inc z2))]
+      [x y z])))
+
+(defn query-cells [{:keys [hash divider] :as spatial} start-cell end-cell]
+  (apply merge (for [cell (all-cells start-cell end-cell)] (hash cell))))
+
+(defn is-inside? [[x1 y1 z1] [x2 y2 z1] [x y z]]
+  (if (and (nil? z1) (nil? z2) (nil? z3))
+    (and (<= x1 x x2) (<= y1 y y2))
+    (and (<= x1 x x2) (<= y1 y y2) (<= z1 z z2))))
+
+(defn query [{:keys [hash divider] :as spatial} start-pos end-pos]
+  (let [start (hash-position divider start-pos)
+        end (hash-position divider end-pos)]
+    ;; now filter for those points actuall in the start-pos end-pos box
+    (into {}
+          (filter (fn [[k v]] (is-inside? start-pos end-pos v))
+                  (query-cells spatial start end)))))
+
 (defn add-to-spatial! [spatial-keyword entity-key position]
   (swap! spatial-hashes update-in [spatial-keyword] add-to-hash entity-key position))
 

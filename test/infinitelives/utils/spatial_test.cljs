@@ -38,3 +38,34 @@
         [:my :entity] [124 -220.5] [115 23.4])
        {:divider 10 :hash {[11 2] {[:my :entity] [115 23.4]}}}))
 )
+
+(deftest all-cells
+  (is (=
+       (s/all-cells [-1 -1] [1 1])
+       [[-1 -1] [-1 0] [-1 1] [0 -1] [0 0] [0 1] [1 -1] [1 0] [1 1]]))
+  (is (=
+       (s/all-cells [-1 -1 -1] [1 1 1])
+       [[-1 -1 -1] [-1 -1 0] [-1 -1 1]
+        [-1  0 -1] [-1  0 0] [-1  0 1]
+        [-1  1 -1] [-1  1 0] [-1  1 1]
+        [ 0 -1 -1] [ 0 -1 0] [ 0 -1 1]
+        [ 0  0 -1] [ 0  0 0] [ 0  0 1]
+        [ 0  1 -1] [ 0  1 0] [ 0  1 1]
+        [ 1 -1 -1] [ 1 -1 0] [ 1 -1 1]
+        [ 1  0 -1] [ 1  0 0] [ 1  0 1]
+        [ 1  1 -1] [ 1  1 0] [ 1  1 1]])))
+
+(deftest query
+  (is (=
+       (-> {:divider 10 :hash {}}
+           (s/add-to-hash :sprite-1 [10 10])
+           (s/add-to-hash :sprite-2 [7 7])
+           (s/add-to-hash :sprite-3 [-7 -7])
+           (s/add-to-hash :sprite-3b [-6 -6])
+           (s/add-to-hash :sprite-4 [-4 7])
+           (s/add-to-hash :sprite-5 [1 -3])
+           (s/add-to-hash :sprite-6 [-7 10])
+           (s/query [-3 -3] [10 10]))
+       {:sprite-1 [10 10]
+        :sprite-2 [7 7]
+        :sprite-5 [1 -3]})))
