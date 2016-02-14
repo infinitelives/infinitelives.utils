@@ -93,10 +93,16 @@
 (defn query-cells [{:keys [hash divider] :as spatial} start-cell end-cell]
   (apply merge (for [cell (all-cells start-cell end-cell)] (hash cell))))
 
-(defn is-inside? [[x1 y1 z1] [x2 y2 z1] [x y z]]
-  (if (and (nil? z1) (nil? z2) (nil? z3))
-    (and (<= x1 x x2) (<= y1 y y2))
-    (and (<= x1 x x2) (<= y1 y y2) (<= z1 z z2))))
+(defn is-inside? [low high pos]
+  (loop [[p & prest] pos
+         state true
+         [l & lrest] low
+         [h & hrest] high]
+    (if (and state (seq lrest) (seq hrest))
+      (recur prest (and state
+                      (<= l p h))
+             lrest hrest)
+      state)))
 
 (defn query [{:keys [hash divider] :as spatial} start-pos end-pos]
   (let [start (hash-position divider start-pos)
