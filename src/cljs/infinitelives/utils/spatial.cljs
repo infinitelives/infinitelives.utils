@@ -75,20 +75,20 @@
           (remove-from-hash-with-hash entity-key old-pos old-hash)
           (add-to-hash-with-hash entity-key new-pos new-hash)))))
 
-;; TODO: rewrite this in some amazing functional inspiration
-;; to solve n-cords where n is integers >= 1
-(defn all-cells [[x1 y1 z1] [x2 y2 z2]]
-  (if (and (nil? z1) (nil? z2))
-    ;; 2-coord
-    (for [x (range x1 (inc x2))
-          y (range y1 (inc y2))]
-      [x y])
-
-    ;; 3-corrd
-    (for [x (range x1 (inc x2))
-          y (range y1 (inc y2))
-          z (range z1 (inc z2))]
-      [x y z])))
+(defn all-cells [low high]
+  (loop [acc '()
+         [l & lrest] low
+         [h & hrest] high]
+    (if (and l h)
+      (if (seq acc)
+        (recur (for [p acc
+                     q (range l (inc h))]
+                 (conj p q))
+               lrest hrest)
+        (recur (for [p (range l (inc h))]
+                 (vector p))
+               lrest hrest))
+      acc)))
 
 (defn query-cells [{:keys [hash divider] :as spatial} start-cell end-cell]
   (apply merge (for [cell (all-cells start-cell end-cell)] (hash cell))))
