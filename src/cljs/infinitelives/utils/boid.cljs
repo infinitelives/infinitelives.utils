@@ -3,6 +3,9 @@
             [infinitelives.utils.math :as math]
             [infinitelives.utils.console :refer [log]]))
 
+;; as described in Reynolds 1999
+;; http://www.red3d.com/cwr/steer/gdc99/
+
 (def example
   {:mass 10.0
    :pos (vec2/vec2 0 0)
