@@ -53,3 +53,11 @@
                  (* 4)                  ; 4 = c (T=Dc)
                  (vec2/scale target-vel)
                  (vec2/add target))))
+
+(defn evade [{:keys [pos] :as boid} target target-vel]
+  (flee boid (->> pos
+                 (vec2/direction target)
+                 vec2/magnitude
+                 (* 4)                  ; 4 = c (T=Dc)
+                 (vec2/scale target-vel)
+                 (vec2/add target))))
