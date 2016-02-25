@@ -45,3 +45,11 @@
     (assoc boid
            :pos new-pos
            :vel new-vel)))
+
+(defn pursue [{:keys [pos] :as boid} target target-vel]
+  (seek boid (->> pos
+                 (vec2/direction target)
+                 vec2/magnitude
+                 (* 4)                  ; 4 = c (T=Dc)
+                 (vec2/scale target-vel)
+                 (vec2/add target))))
