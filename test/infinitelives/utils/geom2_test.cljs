@@ -31,15 +31,15 @@
     (is (= (geom2/polygon-triplets poly)
            [[d a b] [a b c] [b c d] [c d a]]))))
 
-
-(deftest polygon-angles
-  (let [a (vec2/vec2 0 0)
-        b (vec2/vec2 0 4)
-        c (vec2/vec2 3 3)
-        d (vec2/vec2 4 1)
-        e (vec2/vec2 3 0)
-        poly [a b c d e]]
-    (println
-     (sort (map vector
-                              (map #(apply geom2/angle %) (geom2/polygon-triplets poly))
-                              (range))))))
+(comment
+  (deftest polygon-angles
+    (let [a (vec2/vec2 0 0)
+          b (vec2/vec2 0 4)
+          c (vec2/vec2 3 3)
+          d (vec2/vec2 4 1)
+          e (vec2/vec2 3 0)
+          poly [a b c d e]]
+      (println
+       (sort (map vector
+                  (map #(apply geom2/angle %) (geom2/polygon-triplets poly))
+                  (range)))))))
