@@ -14,7 +14,7 @@
   (is (not (string/starts-with? "test string.ext" "est"))))
 
 (deftest url-keyword
-  (is (string/url-keyword "http://domain.com/path/to/file.ext") :file))
+  (is (= (string/url-keyword "http://domain.com/path/to/file.ext") :file)))
 
 (deftest get-extension
-  (is (string/get-extension "http://domain.com/path/to/file.ext") ".ext)"))
+  (is (= (string/get-extension "http://domain.com/path/to/file.ext") "ext")))
