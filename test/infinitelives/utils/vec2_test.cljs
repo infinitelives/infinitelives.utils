@@ -172,3 +172,11 @@
   (is (= (/ Math/PI 2) (vec2/angle-between (vec2/vec2 1 0) (vec2/vec2 0 1))))
   (is (= (/ Math/PI 2) (vec2/angle-between (vec2/vec2 -1 0) (vec2/vec2 0 1))))
   (is (= Math/PI (vec2/angle-between (vec2/vec2 1 0) (vec2/vec2 -1 0)))))
+
+(deftest rotated-pos?
+  (is (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 -1 1)))
+  (is (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 -1 0)))
+  (is (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 -1 -1)))
+  (is (not (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 1 1))))
+  (is (not (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 1 -1))))
+  (is (not (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 1 -1)))))

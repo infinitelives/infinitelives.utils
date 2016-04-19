@@ -207,3 +207,14 @@ return the angle between them in radians"
   (-> (dot v1 v2)
       (/ (* (magnitude v1) (magnitude v2)))
       Math/acos))
+
+(defn rotated-pos?
+  "return true if the second vector is angled as if rotated to the
+  positive side of the first vector. Good for finding out which side
+  of something another thing is on. In a maths axis (+ve y), 'pos' is
+  to the left of v1. On a screen axis, 'pos' is to the right of v1."
+  [v1 v2]
+  (-> v1
+      rotate-90
+      (angle-between v2)
+      (< (/ Math/PI 2))))
