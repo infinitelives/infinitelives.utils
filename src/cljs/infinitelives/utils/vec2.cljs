@@ -117,8 +117,9 @@
   (Vec2/direction v0 v1 (make)))
 
 (defn rotate
-  "return a vector identical to v but rotated
-  ang radians"
+  "return a vector identical to v but rotated ang radians. On a maths
+  axis (+ve y points up) +ve ang rotation is anticlockwise. On a
+  screen axis (+ve y points down) +ve ang rotation is clockwise."
  [v ang]
   (let [cos (Math/cos ang)
         sin (Math/sin ang)]
