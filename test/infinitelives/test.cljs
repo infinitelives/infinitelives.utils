@@ -4,7 +4,9 @@
             [infinitelives.utils.events-test]
             [infinitelives.utils.string-test]
             [infinitelives.utils.math-test]
-            [infinitelives.utils.spatial-test]))
+            [infinitelives.utils.spatial-test]
+            [infinitelives.utils.geom2-test]
+))
 
 (enable-console-print!)
 
