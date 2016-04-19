@@ -126,6 +126,13 @@
     (vec2 (- (* cos (aget v 0)) (* sin (aget v 1)))
           (+ (* cos (aget v 1)) (* sin (aget v 0))))))
 
+(defn rotate-90
+  "calls rotate but is hardcoded 90 degrees. Avoids calling cos and
+  sin"
+  [v]
+  (vec2 (- (aget v 1))
+        (aget v 0)))
+
 (defn random-unit
   "Return a vector pointing in a random direction, but of exactly unit
   length"
