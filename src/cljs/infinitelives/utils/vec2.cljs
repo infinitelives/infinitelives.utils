@@ -191,3 +191,11 @@
 
 (defn get-y [v]
   (aget v 1))
+
+(defn angle-between
+  "Placing the tails of the two vectors together,
+return the angle between them in radians"
+  [v1 v2]
+  (-> (dot v1 v2)
+      (/ (* (magnitude v1) (magnitude v2)))
+      Math/acos))

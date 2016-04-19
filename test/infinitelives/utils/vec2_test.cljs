@@ -161,3 +161,10 @@
   (is (= (* 3 (/ Math/PI 4)) (vec2/heading (vec2/vec2 -1 1))))
   (is (= (* 5 (/ Math/PI 4)) (vec2/heading (vec2/vec2 -1 -1))))
   (is (= (* 7 (/ Math/PI 4)) (vec2/heading (vec2/vec2 1 -1)))))
+
+(deftest angle-between
+  (is (= 0 (vec2/angle-between (vec2/vec2 1 0) (vec2/vec2 1 0))))
+  (is (= (/ Math/PI 2) (vec2/angle-between (vec2/vec2 1 0) (vec2/vec2 0 1))))
+  (is (= (/ Math/PI 2) (vec2/angle-between (vec2/vec2 -1 0) (vec2/vec2 0 1))))
+  (is (= Math/PI (vec2/angle-between (vec2/vec2 1 0) (vec2/vec2 -1 0))))
+)
