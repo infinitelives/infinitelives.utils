@@ -107,6 +107,11 @@
        (vec2/rotate (vec2/vec2 10 10) (* 3 pi-on-2))
        (vec2/vec2 10 -10))))
 
+(deftest rotate-90
+  (is (vec2/equals
+       (vec2/rotate-90 (vec2/vec2 1 0))
+       (vec2/vec2 0 1))))
+
 (deftest random-unit
   (loop [tests 20]
     (let [v1 (vec2/random-unit)
