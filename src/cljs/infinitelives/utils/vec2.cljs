@@ -94,6 +94,11 @@
   [v scalar]
   (Vec2/scale v scalar (make)))
 
+(defn scale-div
+  "Returns a vector that is v, divided by the scalar."
+  [v scalar]
+  (Vec2/scale v (/ 1 scalar) (make)))
+
 (defn unit
   "Returns a unit vector that points in the same direction as v"
   [v]

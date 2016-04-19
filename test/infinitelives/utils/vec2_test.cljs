@@ -76,6 +76,10 @@
   (is (vec2/equals (vec2/scale (vec2/vec2 1 -1) 5)
                   (vec2/vec2 5 -5))))
 
+(deftest scale-div
+  (is (vec2/equals (vec2/scale-div (vec2/vec2 5 -5) 5)
+                  (vec2/vec2 1 -1))))
+
 (deftest unit
   (is (vec2/equals
        (vec2/unit (vec2/vec2 10 -10))
