@@ -13,7 +13,7 @@
    :max-force 1.0
    :max-speed 4.0})
 
-(defn apply-steering [{:keys [mass vel max-speed] :as boid} steering]
+(defn apply-steering [{:keys [mass vel pos max-speed] :as boid} steering]
   (let [accel (vec2/scale steering (/ 1 mass))
         new-vel (-> accel
                     (vec2/add vel)
