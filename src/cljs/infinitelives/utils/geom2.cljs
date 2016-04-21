@@ -22,3 +22,18 @@
        (conj (butlast poly) (last poly))
        poly
        (concat (rest poly) (take 1 poly))))
+
+(defn outside-angle
+  "given three vec2 points representing an angle, calculate the
+  'outside' angle formed on the central point, b. By outside we mean
+  'in the positive polar direction'. That is, on a computer display
+  co-ordinate system, in a clockwise direction (from vector a->b) and
+  in a maths co-ordinate system, a counter-clockwise direction. If the
+  angle is in the negative polar direction, returns a negative
+  value"
+  [a b c]
+  (let [ab (vec2/sub b a)
+        bc (vec2/sub c b)
+        pos? (vec2/rotated-pos? ab bc)
+        theta (vec2/angle-between ab bc)]
+    (if pos? theta (- theta))))

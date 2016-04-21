@@ -31,6 +31,30 @@
     (is (= (geom2/polygon-triplets poly)
            [[d a b] [a b c] [b c d] [c d a]]))))
 
+(deftest outside-angle
+  (is (= (- (/ Math/PI 2))
+         (geom2/outside-angle (vec2/vec2 0 0)
+                              (vec2/vec2 0 1)
+                              (vec2/vec2 1 1))))
+  (is (= (/ Math/PI 2)
+         (geom2/outside-angle (vec2/vec2 0 0)
+                              (vec2/vec2 0 1)
+                              (vec2/vec2 -1 1))))
+  (is (< -1e-10
+         (- (- (/ Math/PI 4))
+            (geom2/outside-angle (vec2/vec2 0 0)
+                                 (vec2/vec2 0 1)
+                                 (vec2/vec2 1 2)))
+         1e-10))
+  (is (< -1e-10
+         (-  (/ Math/PI 4)
+             (geom2/outside-angle (vec2/vec2 0 0)
+                                  (vec2/vec2 0 1)
+                                  (vec2/vec2 -1 2)))
+         1e-10))
+
+  )
+
 (comment
   (deftest polygon-angles
     (let [a (vec2/vec2 0 0)
