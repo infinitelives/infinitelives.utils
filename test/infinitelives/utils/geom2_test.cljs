@@ -51,7 +51,29 @@
              (geom2/outside-angle (vec2/vec2 0 0)
                                   (vec2/vec2 0 1)
                                   (vec2/vec2 -1 2)))
-         1e-10))
+         1e-10)))
+
+(deftest total-outside-angle
+  (let [poly [(vec2/vec2 0 0)
+              (vec2/vec2 0 1)
+              (vec2/vec2 1 2)
+              (vec2/vec2 1 3)
+              (vec2/vec2 0 4)
+              (vec2/vec2 1 5)
+              (vec2/vec2 2 5)
+              (vec2/vec2 3 4)
+              (vec2/vec2 2 3)
+              (vec2/vec2 2 2)
+              (vec2/vec2 3 2)
+              (vec2/vec2 3 1)
+              (vec2/vec2 2 1)
+              (vec2/vec2 1 0)]]
+    (is (=
+         (* -2 Math/PI)
+         (geom2/total-outside-angle poly)))
+    (is (=
+         (* 2 Math/PI)
+         (geom2/total-outside-angle (reverse poly))))))
 
   )
 

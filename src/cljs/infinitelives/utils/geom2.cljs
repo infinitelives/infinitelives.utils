@@ -37,3 +37,12 @@
         pos? (vec2/rotated-pos? ab bc)
         theta (vec2/angle-between ab bc)]
     (if pos? theta (- theta))))
+
+(defn total-outside-angle
+  "Sum all the outside angles on a polygon. Should return 2*pi or
+  -2*pi"
+  [poly]
+  (apply
+   + (map
+      #(apply outside-angle %)
+      (polygon-triplets poly))))
