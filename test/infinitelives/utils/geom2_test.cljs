@@ -75,7 +75,26 @@
          (* 2 Math/PI)
          (geom2/total-outside-angle (reverse poly))))))
 
-  )
+(deftest clockwise-poly?
+  (let [poly [(vec2/vec2 0 0)
+              (vec2/vec2 0 1)
+              (vec2/vec2 1 2)
+              (vec2/vec2 1 3)
+              (vec2/vec2 0 4)
+              (vec2/vec2 1 5)
+              (vec2/vec2 2 5)
+              (vec2/vec2 3 4)
+              (vec2/vec2 2 3)
+              (vec2/vec2 2 2)
+              (vec2/vec2 3 2)
+              (vec2/vec2 3 1)
+              (vec2/vec2 2 1)
+              (vec2/vec2 1 0)]]
+    (is (geom2/positive-poly? (reverse poly)))
+    (is (not (geom2/positive-poly? poly)))
+    (is (geom2/negative-poly? poly))
+    (is (not (geom2/negative-poly? (reverse poly))))))
+
 
 (comment
   (deftest polygon-angles

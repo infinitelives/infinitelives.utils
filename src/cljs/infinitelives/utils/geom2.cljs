@@ -46,3 +46,10 @@
    + (map
       #(apply outside-angle %)
       (polygon-triplets poly))))
+
+(def positive-poly?
+  ^{:doc "is the polygon points laid out in a positive radial
+  direction (clockwise on screen, anti-clockwise on math)?"}
+  (comp pos? total-outside-angle))
+
+(def negative-poly? (comp not positive-poly?))
