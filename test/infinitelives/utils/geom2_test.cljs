@@ -75,7 +75,7 @@
          (* 2 Math/PI)
          (geom2/total-outside-angle (reverse poly))))))
 
-(deftest clockwise-poly?
+(deftest positive-poly?:negative-poly?
   (let [poly [(vec2/vec2 0 0)
               (vec2/vec2 0 1)
               (vec2/vec2 1 2)
@@ -95,16 +95,22 @@
     (is (geom2/negative-poly? poly))
     (is (not (geom2/negative-poly? (reverse poly))))))
 
+(deftest triangulate
+  (let [a (vec2/vec2 1 0)
+        b (vec2/vec2 1 1)
+        c (vec2/vec2 0 1)
+        d (vec2/vec2 0 2)
+        e (vec2/vec2 1 2)
+        f (vec2/vec2 2 1)
+        g (vec2/vec2 2 0)
+        poly [a b c d e f g]]
+    (is (= (geom2/triangulate poly)
+           [[g a b] [f g b] [e f b] [e b c] [e c d]]))))
 
-(comment
-  (deftest polygon-angles
-    (let [a (vec2/vec2 0 0)
-          b (vec2/vec2 0 4)
-          c (vec2/vec2 3 3)
-          d (vec2/vec2 4 1)
-          e (vec2/vec2 3 0)
-          poly [a b c d e]]
-      (println
-       (sort (map vector
-                  (map #(apply geom2/angle %) (geom2/polygon-triplets poly))
-                  (range)))))))
+#_ (deftest tri
+  (let [a (vec2/vec2 0 2)
+        b (vec2/vec2 4 3)
+        c (vec2/vec2 3 2)
+        d (vec2/vec2 4 1)
+        poly [a b c d]]
+    (println (geom2/triangulate poly))))

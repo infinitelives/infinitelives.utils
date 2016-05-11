@@ -18,6 +18,8 @@
   polygon [a b c d e] return [ [e a b] [a b c] [b c d] [c d e] [d e
   a]], That is, the corner a, then the corner b ... and so on"
   [poly]
+  (assert (>= (count poly) 3)
+          "Polygon passed to polygon-triplets has less than three vertices")
   (map vector
        (conj (butlast poly) (last poly))
        poly
@@ -53,3 +55,41 @@
   (comp pos? total-outside-angle))
 
 (def negative-poly? (comp not positive-poly?))
+
+(defn triangulate
+  ([poly]
+   (triangulate poly []))
+  ([poly tris]
+   (if (< (count poly) 3)
+     tris
+     (let [corners (polygon-triplets poly)
+
+           ;; assuming negative polygon layout
+           angles (map #(+ Math/PI (apply outside-angle %)) corners)
+
+           smallest-index (second (first (sort (map vector angles (range)))))
+
+           ;; new poly without that vertex
+           new-poly-head (take smallest-index poly)
+           new-poly-tail (drop (inc smallest-index) poly)
+           new-poly (concat new-poly-head new-poly-tail)
+
+           ;; triangle to add
+           new-tri (nth corners smallest-index)]
+       (recur new-poly (conj tris new-tri))))))
+
+(defn- sign [p1 p2 p3]
+  (-
+   (*
+    (- (vec2/get-x p1) (vec2/get-x p3))
+    (- (vec2/get-y p2) (vec2/get-y p3)))
+   (*
+    (- (vec2/get-x p2) (vec2/get-x p3))
+    (- (vec2/get-y p1) (vec2/get-y p3)))))
+
+(defn point-in-triangle?
+  [[v1 v2 v3] point]
+  (let [b1 (neg? (sign point v1 v2))
+        b2 (neg? (sign point v2 v3))
+        b3 (neg? (sign point v3 v1))]
+    (and (= b1 b2) (= b2 b3))))
