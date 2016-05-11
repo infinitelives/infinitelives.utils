@@ -16,6 +16,20 @@
 ;;
 (def key-state (atom {}))
 
+;; configuration of event handling behavoir.
+;; this is because interoperating with other libraries on a
+;; html page could require event to propagate, but gamejams
+;; you want that stuff automatically set up and configured
+;; to sane defaults
+(defonce key-config
+  (atom {:prevent-defaults true}))
+
+(defn set-prevent-key-defaults [b]
+  (swap! key-config assoc :prevent-defaults b))
+
+(def prevent-key-defaults (partial set-prevent-key-defaults true))
+(def allow-key-defaults (partial set-prevent-key-defaults false))
+
 (defn ascii
   "A clojurescript version of ascii value of. javascript doesn't have
   a char type, but uses a string of length 1 to represent"
@@ -107,7 +121,10 @@ eg.
     false
 
     ;; else prevent event propagation (cursor keys scroll body on mozilla)
-    (.preventDefault ev)))
+    (if (:prevent-defaults @key-config)
+      (.preventDefault ev)
+      false)
+    ))
 
 (defn handle-keyup-event
   "the basic event handler for key up events. Takes the keycode
@@ -116,9 +133,9 @@ eg.
   (swap! key-state (fn [old] (dissoc old (.-keyCode ev))))
 
   ;; stop event propagation on mozilla
-  (.preventDefault ev)
-
-  true)
+  (if (:prevent-defaults @key-config)
+      (.preventDefault ev)
+      true))
 
 (defn install-key-handler!
   "install the keyup and keydown event handlers"
