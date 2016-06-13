@@ -1,6 +1,8 @@
 # infinitelives.utils
 Support utilities for clojurescript games
 
+[![Clojars Project](https://img.shields.io/clojars/v/infinitelives/infinitelives.utils.svg)](https://clojars.org/infinitelives/infinitelives.utils)
+
 # Setup
 
 Put the following in your `project.clj` file's dependency section:
