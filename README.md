@@ -1,6 +1,14 @@
 # infinitelives.utils
 Support utilities for clojurescript games
 
+# Setup
+
+Put the following in your `project.clj` file's dependency section:
+
+```clojure
+[infinitelives/infinitelives.utils "0.1.0"]
+```
+
 # Running tests
 
 You will need phantomjs installed to run the tests.
