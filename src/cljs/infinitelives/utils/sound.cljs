@@ -12,7 +12,7 @@
 ;; where we store all the loaded sounds
 (defonce !sounds (atom {}))
 
-(defn load-sound
+(defn load
   "Initiates a download of the url as a sound. Returns a channel.
   When loaded and decoded, sends a decoded buffer object down the
   channel. This buffer can be used directly as a sound source"
@@ -21,16 +21,24 @@
         c (chan)]
     (.open req "GET" url true)
     (set! (.-responseType req) "arraybuffer")
-    (set! (.-onload req) (fn [] (.decodeAudioData audio-context (.-response req) #(put! c %))))
+    (set! (.-onload req)
+          (fn [] (.decodeAudioData audio-context (.-response req) #(put! c %))))
     (.send req)
     c))
 
-(defn register-sound!
+(defmethod resources/load "png" [url] (load url))
+(defmethod resources/load "gif" [url] (load url))
+(defmethod resources/load "jpg" [url] (load url))
+
+(defn register!
   [url obj]
   (swap! !sounds
          assoc (string/url-keyword url)
-         obj)
-)
+         obj))
+
+(defmethod resources/register! "png" [url obj] (register! url obj))
+(defmethod resources/register! "gif" [url obj] (register! url obj))
+(defmethod resources/register! "jpg" [url obj] (register! url obj))
 
 (defn get-sound [key]
   (key @!sounds))

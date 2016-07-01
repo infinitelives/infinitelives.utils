@@ -1,7 +1,6 @@
 (ns infinitelives.utils.resources
   (:require [infinitelives.utils.string :as string]
-            [cljs.core.async :refer [chan put! <! timeout close!]])
-  )
+            [cljs.core.async :refer [chan put! <! timeout close!]]))
 
 
 (defmulti load
@@ -11,15 +10,6 @@
   "
   (fn [url] (string/get-extension url)))
 
-(defmethod load "png" [url]
-  (let [c (chan)
-        i (js/Image.)]
-    (set! (.-onload i) #(put! c [url i]))
-    (set! (.-onerror i) #(put! c [url nil]))
-    (set! (.-onabort i) #(js/alert "abort"))
-    (set! (.-src i) url)
-    c))
-
 (defmulti register!
   "a multimethod that will register a loaded
   resource to the subsystem that handles it.
@@ -27,12 +17,9 @@
   and the object. register! returns immediately"
   (fn [url obj] (string/get-extension url)))
 
-(defmethod register! "png" [url img]
-  (register-texture! url img))
-
 (defn load-url
   "load-url takes a url and returns a channel
-  that after load and registration will"
+  that after load and registration will "
   [url]
   (go
     (apply register! (<! (load url)))))
