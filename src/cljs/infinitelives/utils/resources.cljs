@@ -1,6 +1,7 @@
 (ns infinitelives.utils.resources
   (:require [infinitelives.utils.string :as string]
-            [cljs.core.async :refer [chan put! <! timeout close!]]))
+            [cljs.core.async :refer [chan put! <! timeout close!]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 
 (defmulti load
@@ -36,7 +37,7 @@
       (loop [i 1]
         (let [[url obj] (<! finished)] ;; a new image has finished loading
           ;; setup a pixi texture keyed by the tail of its filename
-          (register url obj)
+          (register! url obj)
 
           ;; callback progress-fn
           (when progress-fn (progress-fn i num-urls url obj))

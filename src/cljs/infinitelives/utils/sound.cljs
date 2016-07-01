@@ -1,6 +1,7 @@
 (ns infinitelives.utils.sound
   (:require [cljs.core.async :refer [put! chan <! >! alts! timeout close!]]
             [infinitelives.utils.string :as string]
+            [infinitelives.utils.resources :as resources]
             )
   (:require-macros [cljs.core.async.macros :refer [go]])
 )
