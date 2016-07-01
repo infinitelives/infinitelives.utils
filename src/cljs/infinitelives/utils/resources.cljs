@@ -5,6 +5,10 @@
 
 
 (defmulti load
+  "a multimethod to load a resource by url and
+  return a channel, down which will be sent [url object]
+  apon successful load and [url nil] on an error.
+  "
   (fn [url] (string/get-extension url)))
 
 (defmethod load "png" [url]
@@ -16,16 +20,22 @@
     (set! (.-src i) url)
     c))
 
-(defmulti register
+(defmulti register!
+  "a multimethod that will register a loaded
+  resource to the subsystem that handles it.
+  It will be passed two arguments, the url
+  and the object. register! returns immediately"
   (fn [url obj] (string/get-extension url)))
 
-(defmethod register "png" [url img]
+(defmethod register! "png" [url img]
   (register-texture! url img))
 
 (defn load-url
+  "load-url takes a url and returns a channel
+  that after load and registration will"
   [url]
   (go
-    (apply register (<! (load url)))))
+    (apply register! (<! (load url)))))
 
 (defn load-urls
   "loads each url in the passed in list. Updates the progress as it goes with
