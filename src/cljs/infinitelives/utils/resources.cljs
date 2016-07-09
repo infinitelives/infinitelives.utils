@@ -1,6 +1,7 @@
 (ns infinitelives.utils.resources
   (:require [infinitelives.utils.string :as string]
-            [cljs.core.async :refer [chan put! <! timeout close!]])
+            [infinitelives.utils.console :refer [log]]
+            [cljs.core.async :refer [chan put! <! timeout close! take!]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 
@@ -29,13 +30,17 @@
   "loads each url in the passed in list. Updates the progress as it goes with
   a percentage. Once complete, displays all the images fullsize."
   [urls progress-fn]
-  (let [finished (chan)                         ;; make our channel to
-        num-urls (count urls)                   ;; how many urls
-        images (doall                           ;; start loading all the urls
-                (map #(put! finished (load %)) urls))]
+  (let [finished (chan)       ;; make our channel to
+        num-urls (count urls) ;; how many urls
+        ]
+    (doall ;; start loading all the urls
+     (map #(take!
+            (load %)
+            (fn [res] (put! finished res))) urls))
     (go
-      (loop [i 1]
-        (let [[url obj] (<! finished)] ;; a new image has finished loading
+      (loop [i 1 coll {}]
+        (let [[url obj] (<! finished)
+              new-coll (assoc coll url obj)] ;; a new image has finished loading
           ;; setup a pixi texture keyed by the tail of its filename
           (register! url obj)
 
@@ -43,5 +48,6 @@
           (when progress-fn (progress-fn i num-urls url obj))
 
           ;; more images?
-          (when (< i num-urls)
-            (recur (inc i))))))))
+          (if (< i num-urls)
+            (recur (inc i) new-coll)
+            new-coll))))))
