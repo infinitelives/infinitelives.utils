@@ -27,19 +27,20 @@
     (.send req)
     c))
 
-(defmethod resources/load "png" [url] (load url))
-(defmethod resources/load "gif" [url] (load url))
-(defmethod resources/load "jpg" [url] (load url))
+(defmethod resources/load "ogg" [url] (load url))
+(defmethod resources/load "mp3" [url] (load url))
+(defmethod resources/load "wav" [url] (load url))
 
 (defn register!
   [url obj]
   (swap! !sounds
          assoc (string/url-keyword url)
-         obj))
+         obj)
+  {:audio obj})
 
-(defmethod resources/register! "png" [url obj] (register! url obj))
-(defmethod resources/register! "gif" [url obj] (register! url obj))
-(defmethod resources/register! "jpg" [url obj] (register! url obj))
+(defmethod resources/register! "ogg" [url obj] (register! url obj))
+(defmethod resources/register! "mp3" [url obj] (register! url obj))
+(defmethod resources/register! "wav" [url obj] (register! url obj))
 
 (defn get-sound [key]
   (key @!sounds))
