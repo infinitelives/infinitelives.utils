@@ -27,10 +27,10 @@
     (apply register! (<! (load url)))))
 
 (defn load-urls
-  "loads each url in the passed in list. Updates the progress as it goes with
-  a percentage. Once complete, displays all the images fullsize."
+  "loads each url in the passed in list. Updates the progress as it goes by
+  calling a progress callback function."
   [urls progress-fn]
-  (let [finished (chan)       ;; make our channel to
+  (let [finished (chan) ;; make our channel to recieve finished loads
         num-urls (count urls) ;; how many urls
         ]
     (doall ;; start loading all the urls
@@ -39,10 +39,12 @@
             (fn [res] (put! finished res))) urls))
     (go
       (loop [i 1 coll {}]
-        (let [[url obj] (<! finished)
-              new-coll (assoc coll url obj)] ;; a new image has finished loading
-          ;; setup a pixi texture keyed by the tail of its filename
-          (register! url obj)
+        (let [
+              ;; a new url has finished loading
+              [url obj] (<! finished)
+
+              ;; setup a pixi texture keyed by the tail of its filename
+              new-coll (assoc coll url (register! url obj))]
 
           ;; callback progress-fn
           (when progress-fn (progress-fn i num-urls url obj))
