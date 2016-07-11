@@ -1,4 +1,6 @@
-(ns infinitelives.utils.string)
+(ns infinitelives.utils.string
+  (:require [clojure.string :as s])
+  )
 
 (defn ends-with? [str end]
   (let [len (.-length str)
@@ -17,4 +19,4 @@
       keyword))
 
 (defn get-extension [path]
-  (last (.split path ".")))
+  (s/lower-case (last (.split path "."))))
