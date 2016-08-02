@@ -3,7 +3,8 @@
 
 (defn axis
   ([gamepad gamepad-num axis-num]
-   (aget (.-axes gamepad) axis-num))
+   (when gamepad
+     (aget (.-axes gamepad) axis-num)))
   ([gamepad-num axis-num]
    (axis (aget (events/get-gamepads) gamepad-num) gamepad-num axis-num))
   ([axis-num]
@@ -40,14 +41,20 @@
 
 (defn button
   ([gamepad gamepad-num button-num]
-   (aget (.-buttons gamepad)
-         (get ->buttons button-num button-num)))
+   (when gamepad
+     (aget (.-buttons gamepad)
+           (get ->buttons button-num button-num))))
   ([gamepad-num button-num]
    (button (aget (events/get-gamepads) gamepad-num) gamepad-num button-num))
   ([button-num]
    (button 0 button-num)))
 
-(defn pressed? [val]
-  (> val 0.1))
+(defn value-of [button]
+  (when button
+    (.-value button)))
 
-(def button-pressed? (comp pressed? button))
+(defn pressed? [val]
+  (when val
+    (> val 0.1)))
+
+(def button-pressed? (comp pressed? value-of button))
