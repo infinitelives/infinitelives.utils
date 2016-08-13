@@ -23,7 +23,7 @@
     (.open req "GET" url true)
     (set! (.-responseType req) "arraybuffer")
     (set! (.-onload req)
-          (fn [] (.decodeAudioData audio-context (.-response req) #(put! c %))))
+          (fn [] (.decodeAudioData audio-context (.-response req) #(put! c [url %]))))
     (.send req)
     c))
 
