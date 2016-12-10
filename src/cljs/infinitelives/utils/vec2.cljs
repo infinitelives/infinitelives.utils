@@ -200,6 +200,16 @@
 (defn get-y [v]
   (aget v 1))
 
+(defn set-x
+  "return a new vector with a different x"
+  [v x]
+  (vec2 x (aget v 1)))
+
+(defn set-y
+  "return a new vector with a different y"
+  [v y]
+  (vec2 (aget v 0) y))
+
 (defn angle-between
   "Placing the tails of the two vectors together,
 return the angle between them in radians"
