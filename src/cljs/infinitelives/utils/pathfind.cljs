@@ -103,11 +103,17 @@
   (let [args (into #{} arguments)
         corner-cut? (:corner-cut args)
         state (-> (->state #{} #{start}
-                           {} {start 0}
-                           {start (distance-between manhattan start end)}))]
-    (loop [[state next-cell] (A*-step state passable? start end corner-cut?)]
-      (if (not= next-cell end)
+                              {} {start 0}
+                              {start (distance-between manhattan start end)}))]
+    (loop [[{:keys [open-set] :as state} next-cell]
+           (A*-step state passable? start end corner-cut?)]
+      (cond
+        (empty? open-set)
+        nil
+
+        (not= next-cell end)
         (recur (A*-step state passable? next-cell end corner-cut?))
 
         ;; backtrack
+        :default
         (backtrack state end start)))))

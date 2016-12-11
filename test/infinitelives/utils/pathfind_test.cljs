@@ -161,3 +161,12 @@
              [3 2] [4 2] [5 2]
              [6 3] [7 4] [8 5]
              [9 5] [10 5])))))
+
+(deftest A*-cant-reach
+  (let [passable? (fn [[x y]]
+                    (not
+                     (or (= x -5)
+                         (= x 5)
+                         (= y -5)
+                         (= y 5))))]
+    (is (nil? (pf/A* passable? [0 0] [10 10])))))
