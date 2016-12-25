@@ -170,3 +170,16 @@
                          (= y -5)
                          (= y 5))))]
     (is (nil? (pf/A* passable? [0 0] [10 10])))))
+
+(deftest A*-direct-path
+  (let [passable? (fn [[x y]]
+                    (or
+                     (and (<= 2 x 7)
+                          (<= 1 y 6))
+                     (and (<= 8 x 13)
+                          (= 4 y))
+                     (and (= 13 x)
+                          (<= 4 y 9))
+                     (and (<= 6 x 14)
+                          (<= 10 y 12))))]
+    (println (pf/A* passable? [6 5] [6 12]))))
