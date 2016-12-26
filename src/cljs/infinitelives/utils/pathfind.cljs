@@ -16,26 +16,6 @@
    (Math/abs (- x1 x2))
    (Math/abs (- y1 y2))))
 
-(defn state-add-neighbour [{:keys [closed-set open-set came-from]
-                            :as  state} current neighbour]
-  (assoc state
-         :open-set (conj open-set neighbour)
-         :came-from (assoc came-from neighbour current)))
-
-(defn state-add-open [state cell]
-  (update state :open-set conj cell))
-
-(defn state-open-to-closed [state cell]
-  (-> state
-      (update :open-set disj cell)
-      (update :closed-set conj cell)))
-
-(defn reduce-state-over-neighbours [state current neighbours]
-  (reduce
-   (fn [acc item] (state-add-neighbour acc current item))
-   state
-   neighbours))
-
 (defn g-dist [[x1 y1] [x2 y2]]
   (let [dx (Math/abs (- x1 x2))
         dy (Math/abs (- y1 y2))]
@@ -45,6 +25,40 @@
 
       (or (= 1 dx) (= 1 dy))
       orthogonal-cost)))
+
+(defn state-add-neighbour [{:keys [closed-set open-set came-from f-score g-score]
+                            :as  state} current neighbour goal]
+  (let [tentative-gscore (+ (g-dist neighbour current)
+                            (get g-score current))
+        neigh-g (get g-score neighbour 9999999)]
+    ;(js/console.log ">=" tentative-gscore neigh-g (>= tentative-gscore neigh-g))
+    (if (>= tentative-gscore neigh-g)
+      (assoc state
+             :open-set (conj open-set neighbour)
+             ;:came-from (assoc came-from neighbour current)
+             )
+      (assoc state
+             :open-set (conj open-set neighbour)
+             :came-from (assoc came-from neighbour current)
+             :g-score (assoc g-score neighbour tentative-gscore)
+             :f-score (assoc f-score neighbour
+                             (+ (g-score neighbour)
+                                (* orthogonal-cost
+                                   (distance-between manhattan neighbour goal))))))))
+
+(defn state-add-open [state cell]
+  (update state :open-set conj cell))
+
+(defn state-open-to-closed [state cell]
+  (-> state
+      (update :open-set disj cell)
+      (update :closed-set conj cell)))
+
+(defn reduce-state-over-neighbours [state current neighbours goal]
+  (reduce
+   (fn [acc item] (state-add-neighbour acc current item goal))
+   state
+   neighbours))
 
 (defn calculate-open-fscore [{:keys [f-score g-score open-set] :as state}
                              parent destination]
@@ -93,8 +107,8 @@
                          (and (= y (inc yp)) (not (passable? [xp (inc yp)]))) false
                          :default true))))
         state (-> state
-                  (reduce-state-over-neighbours current passable-neighbors)
-                  (calculate-open-fscore current end)
+                  (reduce-state-over-neighbours current passable-neighbors end)
+                  ;(calculate-open-fscore current end)
                   (state-open-to-closed current))
         next-cell (lowest-f-score-open-cell state)]
     [state next-cell]))
