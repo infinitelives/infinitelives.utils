@@ -194,6 +194,8 @@
 (defn as-vector [v]
   [(aget v 0) (aget v 1)])
 
+(def get-xy as-vector)
+
 (defn get-x [v]
   (aget v 0))
 
