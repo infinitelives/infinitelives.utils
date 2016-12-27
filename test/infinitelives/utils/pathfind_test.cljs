@@ -198,4 +198,20 @@
         [13 9] [13 10] [12 11] [11 12]
         [10 12] [9 12] [8 12] [7 12]
         [6 12])
-      (pf/A* passable? [6 5] [6 12])))))
+      (pf/A* passable? [6 5] [6 12])))
+
+    ;; the following is a more direct path that the A* algo
+    ;; doesn't produce. This is because of a side effect in
+    ;; our path creation by searching in the direction of the
+    ;; target more agressively than other paths. This will
+    ;; eventually need to be fixed. TODO: make this pass
+    #_ (is
+     (=
+      '([4 4] [5 4] [6 4] [7 4] [8 4] [9 4]
+        [10 4] [11 4] [12 4] [13 4]
+        [13 5] [13 6] [13 7] [13 8]
+        [13 9] [13 10] [12 11] [11 12]
+        [10 12] [9 12] [8 12] [7 12]
+        [6 12])
+      (pf/A* passable? [4 4] [6 12])))
+    ))
