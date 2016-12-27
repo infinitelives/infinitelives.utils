@@ -230,3 +230,13 @@ return the angle between them in radians"
       rotate-90
       (angle-between v2)
       (< (/ Math/PI 2))))
+
+(defn direction-quad [v]
+  (let [[x y] (get-xy v)]
+    (if (> x y)
+      (if (> x (- y))
+        :up
+        :left)
+      (if (> x (- y))
+        :down
+        :right))))
