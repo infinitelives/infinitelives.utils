@@ -50,6 +50,11 @@
      and are of the same length"}
   equals Vec2/equals)
 
+(defn from-vector [[x y]]
+  (vec2 x y))
+
+(def from-xy from-vector)
+
 (defn almost
   "Returns true if all the vectors passed in are so close they
   are almost equal. This is for dealing with precision problems
@@ -194,6 +199,8 @@
 (defn as-vector [v]
   [(aget v 0) (aget v 1)])
 
+(def to-vector as-vector)
+
 (def get-xy as-vector)
 
 (defn get-x [v]
@@ -235,8 +242,8 @@ return the angle between them in radians"
   (let [[x y] (get-xy v)]
     (if (> x y)
       (if (> x (- y))
-        :up
-        :left)
+        :right
+        :up)
       (if (> x (- y))
         :down
-        :right))))
+        :left))))
