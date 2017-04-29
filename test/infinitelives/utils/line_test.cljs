@@ -3,4 +3,4 @@
             [infinitelives.utils.line :as line]))
 
 (deftest bresenham
-  (is (= (line/bresenham 0 0 0 0) [[0 0]])))
+  (is (= (line/bresenham 0 0 0 1) [[0 0] [0 1]])))
