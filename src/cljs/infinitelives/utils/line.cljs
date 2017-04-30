@@ -90,8 +90,8 @@
 
 (defn bresenham
   "given a start and end point, return a lazy sequence
-  of all the squares that are crossed in the drawing of the line
-  via bresenham's algorithm
+  of all the pixels or cells that are crossed in the drawing
+  of the line via bresenham's algorithm
 
   pass in two vec2s, start and end, or four values x0, y0, x1, y1
 
@@ -102,12 +102,16 @@
          [x1 y1] (vec2/as-vector end)]
      (bresenham x0 y0 x1 y1)))
   ([x0 y0 x1 y1]
-   (let [octant (octant-of x0 y0 x1 y1)
-         [x0 y0] (to-zero-octant octant x0 y0)
-         [x1 y1] (to-zero-octant octant x1 y1)]
-     (for [x (range x0 (inc x1))]
-       (from-zero-octant
-        octant x (+ y0
-                    (* (- x x0)
-                       (/ (- y1 y0)
-                          (- x1 x0)))))))))
+   (if (and (= x0 x1) (= y0 y1))
+     [[x0 y0]]
+     (let [octant (octant-of x0 y0 x1 y1)
+           [x0 y0] (to-zero-octant octant x0 y0)
+           [x1 y1] (to-zero-octant octant x1 y1)]
+       (for [x (range x0 (inc x1))]
+         (from-zero-octant
+          octant x
+          (Math/floor
+           (+ 0.5 y0
+              (* (- x x0)
+                 (/ (- y1 y0)
+                    (- x1 x0)))))))))))
