@@ -14,10 +14,10 @@
 
 (def linear-f identity)
 
-(defn- quad-in-f [t]
+(defn quad-in-f [t]
   (* t t))
 
-(defn- quad-out-f
+(defn quad-out-f
   "v = -(x-1)^2 + 1
   =>   v = -x^2 + 2x
   =>   v = x * (2-x)"
@@ -25,10 +25,46 @@
   [t]
   (* t (- 2 t)))
 
-(defn- quad-in-out-f [t]
+(defn quad-in-out-f [t]
   (if (< t 0.5)
     (* 2 t t)
     (+ -1 (* t (- 4 (* 2 t))))))
+
+(defn sine-in-f [t]
+  (- 1 (Math/cos (* t Math/PI 0.5))))
+
+(defn sine-out-f [t]
+  (Math/sin (* t Math/PI 0.5)))
+
+(defn sine-in-out-f [t]
+  (* -0.5 (- (Math/cos (* Math/PI t)) 1)))
+
+(defn cubic-in-f [t]
+  (* t t t))
+
+(defn cubic-out-f [t]
+  (let [t1 (- t 1)]
+    (+ 1 (* t1 t1 t1))))
+
+(defn cubic-in-out-f [t]
+  (if (< t 0.5)
+    (* 4 t t t)
+    (let [2t (* 2 t)
+          2t-2 (- 2t 2)])
+    (+ 1 (* (- t 1) 2t-2 2t-2))))
+
+(defn quart-in-f [t]
+  (* t t t t))
+
+(defn quart-out-f [t]
+  (let [t1 (- t 1)]
+    (- 1 (* t1 t1 t1 t1))))
+
+(defn quart-in-out-f [t]
+  (if (< t 0.5)
+    (* 8 t t t t)
+    (let [t1 (- t 1)]
+      (- 1 (* 8 t1 t1 t1 t1)))))
 
 (defn- make-ease-fn [func]
   (fn [t b c d]
