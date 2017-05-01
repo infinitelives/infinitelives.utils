@@ -49,9 +49,9 @@
 (defn cubic-in-out-f [t]
   (if (< t 0.5)
     (* 4 t t t)
-    (let [2t (* 2 t)
-          2t-2 (- 2t 2)])
-    (+ 1 (* (- t 1) 2t-2 2t-2))))
+    (let [t2 (* 2 t)
+          t2-2 (- t2 2)])
+    (+ 1 (* (- t 1) t2-2 t2-2))))
 
 (defn quart-in-f [t]
   (* t t t t))
