@@ -21,3 +21,18 @@
   (is (= (ease/quad-in-out 0.5 0 1 1) 0.5))
   (is (= (ease/quad-in-out 0.25 0 1 1) 0.125))
   (is (= (ease/quad-in-out 0.75 0 1 1) 0.875)))
+
+(deftest cubic
+  (is (= (ease/cubic-in 0 0 1 1) 0))
+  (is (= (ease/cubic-in 1 0 1 1) 1))
+  (is (= (ease/cubic-in 0.5 0 1 1) 0.125))
+
+  (is (= (ease/cubic-out 0 0 1 1) 0))
+  (is (= (ease/cubic-out 1 0 1 1) 1))
+  (is (= (ease/cubic-out 0.5 0 1 1) 0.875))
+
+  (is (= (ease/cubic-in-out 0 0 1 1) 0))
+  (is (= (ease/cubic-in-out 1 0 1 1) 1))
+  (is (= (ease/cubic-in-out 0.5 0 1 1) 0.5))
+  (is (= (ease/cubic-in-out 0.25 0 1 1) (* 0.5 0.5 0.5 0.5)))
+  (is (= (ease/cubic-in-out 0.75 0 1 1) (- 1 (* 0.5 0.5 0.5 0.5)))))

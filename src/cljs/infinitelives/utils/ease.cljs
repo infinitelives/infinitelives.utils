@@ -50,8 +50,8 @@
   (if (< t 0.5)
     (* 4 t t t)
     (let [t2 (* 2 t)
-          t2-2 (- t2 2)])
-    (+ 1 (* (- t 1) t2-2 t2-2))))
+          t2-2 (- t2 2)]
+      (+ 1 (* (- t 1) t2-2 t2-2)))))
 
 (defn quart-in-f [t]
   (* t t t t))
@@ -94,3 +94,8 @@
   fast through the halfway point and then slowing down
   to stop at the destination"}
   quad-in-out (make-ease-fn quad-in-out-f))
+
+
+(def cubic-in (make-ease-fn cubic-in-f))
+(def cubic-out (make-ease-fn cubic-out-f))
+(def cubic-in-out (make-ease-fn cubic-in-out-f))
