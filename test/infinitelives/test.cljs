@@ -7,6 +7,7 @@
             [infinitelives.utils.spatial-test]
             [infinitelives.utils.geom2-test]
             [infinitelives.utils.line-test]
+            [infinitelives.utils.intersect-test]
             [infinitelives.utils.ease-test]
             [infinitelives.utils.pathfind-test]
 ))
