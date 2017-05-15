@@ -247,3 +247,44 @@ return the angle between them in radians"
       (if (> x (- y))
         :down
         :left))))
+
+
+(defn direction-quad-ud [v]
+  (let [[x y] (get-xy v)]
+    (cond
+      (= x y)
+      (cond
+        (pos? y) :down
+        (neg? y) :up
+        :default :center)
+
+      (> x y)
+      (cond
+        ;(= x y) :up
+        (> x (- y)) :right
+        :default :up)
+
+      :default
+      (cond
+        (>= x (- y)) :down
+        :default :left))))
+
+(defn direction-quad-lr [v]
+  (let [[x y] (get-xy v)]
+    (cond
+      (= x y)
+      (cond
+        (pos? y) :right
+        (neg? y) :left
+        :default :center)
+
+      (> x y)
+      (cond
+        ;(= x y) :up
+        (>= x (- y)) :right
+        :default :up)
+
+      :default
+      (cond
+        (> x (- y)) :down
+        :default :left))))

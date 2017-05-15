@@ -180,3 +180,22 @@
   (is (not (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 1 1))))
   (is (not (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 1 -1))))
   (is (not (vec2/rotated-pos? (vec2/vec2 0 1) (vec2/vec2 1 -1)))))
+
+(deftest direction-quad-ud
+  (is
+   (= (vec2/direction-quad-ud (vec2/vec2 1 1))
+      :down))
+  (is (= (vec2/direction-quad-ud (vec2/vec2 -1 1))
+         :down))
+  (is (= (vec2/direction-quad-ud (vec2/vec2 1 -1))
+         :up))
+  (is (= (vec2/direction-quad-ud (vec2/vec2 -1 -1))
+         :up))
+  (is (= (vec2/direction-quad-ud (vec2/vec2 0 1))
+         :down))
+  (is (= (vec2/direction-quad-ud (vec2/vec2 0 -1))
+         :up))
+  (is (= (vec2/direction-quad-ud (vec2/vec2 1 0))
+         :right))
+  (is (= (vec2/direction-quad-ud (vec2/vec2 -1 0))
+         :left)))
