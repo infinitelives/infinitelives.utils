@@ -288,3 +288,17 @@ return the angle between them in radians"
       (cond
         (> x (- y)) :down
         :default :left))))
+
+;; make the underlying type of the vec2 sequable and countable
+(extend-type js/Float64Array
+  ICounted
+  (-count [this] (.length this))
+
+  ISeqable
+  (-seq [this]
+    (for [i (range (.-length this))] (aget this i)))
+
+  ASeq
+  ISeq
+  (-first [this] (aget this 0))
+  (-rest [this] (for [i (range 1 (.-length this))] (aget this i))))
