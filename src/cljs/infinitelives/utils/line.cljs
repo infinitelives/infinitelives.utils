@@ -443,3 +443,18 @@
   (vec2/add
    offset
    (constrain opts (vec2/sub oldpos offset) (vec2/sub newpos offset))))
+
+(defn constrain-scale [scale opts old-pos new-pos]
+  (vec2/scale (constrain opts
+                         (vec2/scale old-pos (/ 1 scale))
+                         (vec2/scale new-pos (/ 1 scale)))
+              scale))
+
+(defn constrain-offset-scale [offset scale opts old-pos new-pos]
+  (vec2/add
+   offset
+   (vec2/scale
+    (constrain opts
+               (vec2/scale (vec2/sub old-pos offset) (/ 1 scale))
+               (vec2/scale (vec2/sub new-pos offset) (/ 1 scale)))
+    scale)))
