@@ -296,9 +296,13 @@ return the angle between them in radians"
 
   ISeqable
   (-seq [this]
-    (for [i (range (.-length this))] (aget this i)))
+    (for [i (range (.-length this))]
+      (aget this i)))
 
   ASeq
   ISeq
-  (-first [this] (aget this 0))
-  (-rest [this] (for [i (range 1 (.-length this))] (aget this i))))
+  (-first [this]
+    (aget this 0))
+  (-rest [this]
+    (for [i (range 1 (.-length this))]
+      (aget this i))))
