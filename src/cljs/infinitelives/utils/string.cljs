@@ -27,7 +27,7 @@
 (defn get-extension [path]
   (s/lower-case (last (.split path "."))))
 
-(defn get-url-extenstion [url]
+(defn get-url-extension [url]
   (-> url
       url-remove-params
       get-extension))
