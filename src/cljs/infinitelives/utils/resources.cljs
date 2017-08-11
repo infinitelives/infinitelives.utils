@@ -10,14 +10,14 @@
   return a channel, down which will be sent [url object]
   apon successful load and [url nil] on an error.
   "
-  (fn [url] (string/get-extension url)))
+  (fn [url] (string/get-url-extension url)))
 
 (defmulti register!
   "a multimethod that will register a loaded
   resource to the subsystem that handles it.
   It will be passed two arguments, the url
   and the object. register! returns immediately"
-  (fn [url obj] (string/get-extension url)))
+  (fn [url obj] (string/get-url-extension url)))
 
 (defn load-url
   "load-url takes a url and returns a channel
