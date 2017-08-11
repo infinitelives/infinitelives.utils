@@ -54,12 +54,13 @@
             :default form))))
     body))
 
-(defmacro go-while [test & body]
-  `(go
-     ~(thread-test-around-sync-points test body)))
-
 (defmacro continue-while [test & body]
   `(try
      ~(thread-test-around-sync-points test body)
      (catch js/Error e
-       (js/console.log "continue-while exit triggered by: " e))))
+       ;;(js/console.log "continue-while exit triggered by: " e)
+       )))
+
+(defmacro go-while [test & body]
+  `(go
+     (continue-while ~test ~@body)))
