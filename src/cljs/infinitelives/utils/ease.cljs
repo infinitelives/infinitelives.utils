@@ -5,9 +5,9 @@
 ;; arguments:
 ;; t - time: starts at 0 and goes to duration d. you repeatedly pass in differnt
 ;;           values of this, from 0 -> d
-;; d - duration: how long the movement goes fo
 ;; b - initial value
 ;; c - change (final value - initial value)
+;; d - duration: how long the movement goes fo
 
 ;; *-f functions take t in range 0 to 1
 ;;     and return value v in range 0 to 1

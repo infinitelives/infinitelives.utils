@@ -1,4 +1,4 @@
-(defproject infinitelives/infinitelives.utils "0.1.1-SNAPSHOT"
+(defproject infinitelives/infinitelives.utils "0.1.2-SNAPSHOT"
   :description "Support utilities for cljs games"
   :url "https://github.com/infinitelives"
   :license {:name "Eclipse Public License"
