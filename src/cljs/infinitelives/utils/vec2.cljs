@@ -289,6 +289,11 @@ return the angle between them in radians"
         (> x (- y)) :down
         :default :left))))
 
+(defn zero-vec? [v]
+  (and
+   (zero? (get-x v))
+   (zero? (get-y v))))
+
 ;; make the underlying type of the vec2 sequable and countable
 (extend-type js/Float64Array
   ICounted
