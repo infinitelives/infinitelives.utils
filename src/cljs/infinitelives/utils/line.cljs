@@ -406,6 +406,8 @@
         (vec2/add oldpos))))
 
 
+
+
 (defn constrain [{:keys [passable?]
                   :as opts} oldpos newpos]
   (if (vec2/almost newpos oldpos)
